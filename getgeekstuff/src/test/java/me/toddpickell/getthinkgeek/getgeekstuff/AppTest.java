@@ -52,24 +52,25 @@ public class AppTest
     public void testGetCoolHatFromThinkgeek() throws Exception {
     	WebDriver driver = new FirefoxDriver();
     	driver.navigate().to("http://www.thinkgeek.com");
-    	assertTrue("expected title: ThinkGeek :: Stuff for Smart Masses || ThinkGeek, actual title: " + driver.getTitle(), 
-    			driver.getTitle().equals("ThinkGeek :: Stuff for Smart Masses") || driver.getTitle().equals("ThinkGeek"));
+    	String findName = "ThinkGeek";
+    	assertHome(driver, findName);
     	
     	WebElement searchgeek = driver.findElement(By.id("search-term"));
     	searchgeek.sendKeys("back to the future");
     	searchgeek.submit();
     	
     	driver.findElement(By.cssSelector("img[alt='Back to the Future Marty Hat Replica']")).click();
-    	assertTrue("expected title: ThinkGeek :: Back to the Future Marty Hat Replica, actual title: " + driver.getTitle(), 
-    			driver.getTitle().equals("ThinkGeek :: Back to the Future Marty Hat Replica"));
+    	String findProduct = "Back to the Future Marty Hat Replica";
+    	assertTrue("expected title: Back to the Future Marty Hat Replica, actual title: " + driver.getTitle(), 
+    			driver.getTitle().toLowerCase().contains((findProduct.toLowerCase())));
     	
     	driver.findElement(By.id("submitcart")).click();
-    	assertTrue("expected title: ThinkGeek :: Your Loot!, actual title: " + driver.getTitle(), 
-    			driver.getTitle().equals("ThinkGeek :: Your Loot!"));
+    	String findCart = "Your Loot!";
+    	assertLoot(driver, findCart);
     	
     	driver.findElement(By.className("cart_checkout")).click();
-    	assertTrue("expected title: ThinkGeek :: Warpspeed Checkout :: Addresses, actual title: " + driver.getTitle(), 
-    			driver.getTitle().equals("ThinkGeek :: Warpspeed Checkout :: Addresses"));
+    	String findCheckout = "Warpspeed Checkout";
+    	assertWarpspeed(driver, findCheckout);
     	
     	
     	WebElement loginbox = driver.findElement(By.className("loginbox"));
@@ -78,22 +79,34 @@ public class AppTest
     	WebElement passbox = loginbox.findElement(By.cssSelector("input[name='pass']"));
     	passbox.sendKeys("mypasswordsucks");
     	loginbox.submit();
-    	assertTrue("expected title: ThinkGeek :: Warpspeed Checkout, actual title: " + driver.getTitle(), 
-    			driver.getTitle().equals("ThinkGeek :: Warpspeed Checkout"));
+    	assertWarpspeed(driver, findCheckout);
     	
     	driver.findElement(By.cssSelector("a[title='Click here to edit the contents of your cart.']")).click();
-    	assertTrue("expected title: ThinkGeek :: Your Loot!, actual title: " + driver.getTitle(), 
-    			driver.getTitle().equals("ThinkGeek :: Your Loot!"));
+    	assertLoot(driver, findCart);
     	
     	driver.findElement(By.cssSelector("input[name='0_del']")).click();
     	driver.findElement(By.cssSelector("input[type='submit'][value='Update Cart']")).click();
     	
     	driver.findElement(By.className("logolink")).click();
-    	assertTrue("expected title: ThinkGeek :: Stuff for Smart Masses, actual title: " + driver.getTitle(), 
-    			driver.getTitle().equals("ThinkGeek :: Stuff for Smart Masses"));
+    	assertHome(driver, findName);
     	
     	driver.close();
     }
+
+	private void assertHome(WebDriver driver, String findName) {
+		assertTrue("expected title: ThinkGeek, actual title: " + driver.getTitle(), 
+    			driver.getTitle().toLowerCase().contains((findName).toLowerCase()));
+	}
+
+	private void assertLoot(WebDriver driver, String findCart) {
+		assertTrue("expected title: Your Loot!, actual title: " + driver.getTitle(), 
+    			driver.getTitle().toLowerCase().contains((findCart.toLowerCase())));
+	}
+
+	private void assertWarpspeed(WebDriver driver, String findCheckout) {
+		assertTrue("expected title: Warpspeed Checkout, actual title: " + driver.getTitle(), 
+    			driver.getTitle().toLowerCase().contains((findCheckout.toLowerCase())));
+	}
 	
 	
     /* 
