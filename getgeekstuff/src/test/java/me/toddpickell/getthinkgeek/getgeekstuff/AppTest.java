@@ -15,7 +15,8 @@ import junit.framework.TestSuite;
 public class AppTest 
     extends TestCase
 {
-    private static final String HTTP_IT_MST_EDU = "http://it.mst.edu";
+    private static final String THINK_GEEK_PRODUCT = "Back to the Future Marty Hat Replica";
+	private static final String HTTP_IT_MST_EDU = "http://it.mst.edu";
 
 	/**
      * Create the test case
@@ -52,25 +53,21 @@ public class AppTest
     public void testGetCoolHatFromThinkgeek() throws Exception {
     	WebDriver driver = new FirefoxDriver();
     	driver.navigate().to("http://www.thinkgeek.com");
-    	String findName = "ThinkGeek";
-    	assertHome(driver, findName);
+    	assertHome(driver);
     	
     	WebElement searchgeek = driver.findElement(By.id("search-term"));
     	searchgeek.sendKeys("back to the future");
     	searchgeek.submit();
     	
     	driver.findElement(By.cssSelector("img[alt='Back to the Future Marty Hat Replica']")).click();
-    	String findProduct = "Back to the Future Marty Hat Replica";
-    	assertTrue("expected title: Back to the Future Marty Hat Replica, actual title: " + driver.getTitle(), 
-    			driver.getTitle().toLowerCase().contains((findProduct.toLowerCase())));
+    	assertTrue("expected title: " + THINK_GEEK_PRODUCT + ", actual title: " + driver.getTitle(), 
+    			driver.getTitle().toLowerCase().contains((THINK_GEEK_PRODUCT.toLowerCase())));
     	
     	driver.findElement(By.id("submitcart")).click();
-    	String findCart = "Your Loot!";
-    	assertLoot(driver, findCart);
+    	assertLoot(driver);
     	
     	driver.findElement(By.className("cart_checkout")).click();
-    	String findCheckout = "Warpspeed Checkout";
-    	assertWarpspeed(driver, findCheckout);
+    	assertWarpspeed(driver);
     	
     	
     	WebElement loginbox = driver.findElement(By.className("loginbox"));
@@ -79,31 +76,36 @@ public class AppTest
     	WebElement passbox = loginbox.findElement(By.cssSelector("input[name='pass']"));
     	passbox.sendKeys("mypasswordsucks");
     	loginbox.submit();
-    	assertWarpspeed(driver, findCheckout);
+    	assertWarpspeed(driver);
+    	//screenshot here.
     	
     	driver.findElement(By.cssSelector("a[title='Click here to edit the contents of your cart.']")).click();
-    	assertLoot(driver, findCart);
+    	assertLoot(driver);
     	
     	driver.findElement(By.cssSelector("input[name='0_del']")).click();
+    	//assert that box was checked here.
     	driver.findElement(By.cssSelector("input[type='submit'][value='Update Cart']")).click();
     	
     	driver.findElement(By.className("logolink")).click();
-    	assertHome(driver, findName);
+    	assertHome(driver);
     	
     	driver.close();
     }
 
-	private void assertHome(WebDriver driver, String findName) {
+	private void assertHome(WebDriver driver) {
+    	String findName = "ThinkGeek";
 		assertTrue("expected title: ThinkGeek, actual title: " + driver.getTitle(), 
     			driver.getTitle().toLowerCase().contains((findName).toLowerCase()));
 	}
 
-	private void assertLoot(WebDriver driver, String findCart) {
+	private void assertLoot(WebDriver driver) {
+		String findCart = "Your Loot!";
 		assertTrue("expected title: Your Loot!, actual title: " + driver.getTitle(), 
     			driver.getTitle().toLowerCase().contains((findCart.toLowerCase())));
 	}
 
-	private void assertWarpspeed(WebDriver driver, String findCheckout) {
+	private void assertWarpspeed(WebDriver driver) {
+    	String findCheckout = "Warpspeed Checkout";
 		assertTrue("expected title: Warpspeed Checkout, actual title: " + driver.getTitle(), 
     			driver.getTitle().toLowerCase().contains((findCheckout.toLowerCase())));
 	}
